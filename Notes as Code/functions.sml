@@ -12,3 +12,5 @@ fun cube(x: int) =
 val sixtyfour = cube(4)
 
 val fortytwo = pow(6, 2) + 6
+
+(* Lecture: functions, informally *)
