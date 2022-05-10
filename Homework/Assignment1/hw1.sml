@@ -1,30 +1,30 @@
 (* Assignment 1 *)
 
 (* #1 *)
-(* create some bindings to test the function *)
-val d1 = (2022, 5, 28)
-val d2 = (2023, 3, 21)
-val d3 = (1981, 12, 7)
-
 fun is_older (date1: int*int*int, date2: int*int*int) =
-    if (#1 date1) > (#1 date2)
+    if (#1 date1) < (#1 date2)
     then true
-    else if (#2 date1) > (#2 date2)
+    else if (#1 date1) = (#1 date2) andalso (#2 date1) < (#2 date2)
     then true
-    else if (#3 date1) > (#3 date2)
+    else if (#1 date1) = (#1 date2) andalso (#2 date1) = (#2 date2) andalso (#3 date1) < (#3 date2)
     then true
     else false
 
 (* #2 *)
-val dl1 = [d1, d2, d3]
+fun number_in_month(dates: (int*int*int) list, month: int) =
+    let
+        fun is_in_month(date: int*int*int) = 
+            if (#2 date) = month then 1 else 0
+    in
+        if (null dates)
+        then 0
+        else is_in_month(hd dates) + number_in_month(tl dates, month)
+    end
 
-fun is_in_month(date: int*int*int, month: int) = 
-    if (#2 date) = month
-    then true
-    else false
+(* #3 *)
+fun number_in_months(dates: (int*int*int) list, months: int list) = 
+    if null months
+    then 0
+    else number_in_month(dates, hd months) + number_in_months(dates, tl months)
 
-fun number_in_month(dates: (int*int*int) list, month: int) = 
-    if is_in_month(hd dates, month)
-    then 1+number_in_month(tl dates, month)
-    else number_in_month(tl dates, month)
-
+(* 4 *)
