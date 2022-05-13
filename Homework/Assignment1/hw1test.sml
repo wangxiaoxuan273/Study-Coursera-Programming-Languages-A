@@ -62,3 +62,11 @@ val test_mr2 = month_range(270, 274) = [9, 9, 9, 9, 10]
 (* #11 Tests *)
 val test_o1 = oldest([(2019, 12, 24),(2019, 3, 3),(2019, 4, 18)]) = SOME (2019, 3, 3)
 val test_o2 = oldest(dl1) = SOME (1981, 12, 7)
+
+(* #12 Tests *)
+val test_dimc1 = number_in_months_challenge(dl1, [3, 3, 5, 5, 6]) = 4
+val test_dimc2 = number_in_months_challenge(dl1, [12, 3, 12, 2]) = 2
+
+(* #13 Tests *)
+val test_rd1 = reasonable_date(2020, 2, 29)
+val test_rd2 = not (reasonable_date(1980, 6, 31))

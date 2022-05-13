@@ -99,3 +99,66 @@ fun oldest(dates: (int*int*int) list) =
         in
             SOME(get_oldest(dates, hd dates))
         end
+
+(* #12 *)
+fun remove_duplicates(xs: int list) = 
+    let 
+        fun in_list(x: int, xs: int list) = 
+            if null xs
+            then false
+            else 
+                if hd xs = x
+                then true
+                else in_list(x, tl xs)
+        
+        fun get_list(xs: int list, res: int list) =
+            if null xs
+            then res
+            else 
+                if in_list(hd xs, res)
+                then get_list(tl xs, res)
+                else get_list(tl xs, (hd xs) :: res)
+    in
+        get_list(xs, [])
+    end
+
+fun number_in_months_challenge(dates: (int*int*int) list, months: int list) = 
+    number_in_months(dates, remove_duplicates(months))
+
+fun dates_in_months_challenge(dates: (int*int*int) list, months: int list) = 
+    dates_in_months(dates, remove_duplicates(months))
+
+(* #13 *)
+fun reasonable_date(date: int*int*int) = 
+    let
+        fun is_leap_year(year: int) = 
+            if year mod 4 <> 0
+            then false
+            else
+                if year mod 400 = 0
+                then true
+                else
+                    if year mod 100 = 0
+                    then false
+                    else true
+        
+        fun get_nth(xs: int list, n: int) = 
+            if n = 1
+            then hd xs
+            else get_nth(tl xs, n-1)
+
+        val days = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
+    in
+        if (#1 date <= 0) orelse (#2 date > 12) orelse (#2 date <= 0)
+        then false (* basic check of year and month *)
+        else
+            if (#3 date > 31) orelse (#3 date <= 0) (* basic check of day *)
+            then false
+            else
+                if is_leap_year(#1 date) andalso (#2 date) = 2 andalso (#3 date) = 29
+                then true
+                else
+                    if (#3 date) > get_nth(days, #2 date)
+                    then false
+                    else true
+    end
