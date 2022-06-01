@@ -16,7 +16,7 @@ fun all_except_option(s, sl) =
             [] => NONE
             | x :: xs' =>  if same_string(x, s)
                            then SOME (lst @ xs')
-                           else all_except(s, xs', x :: lst)
+                           else all_except(s, xs', lst @ [x])
    in
       all_except(s, sl, [])
    end
@@ -24,7 +24,41 @@ fun all_except_option(s, sl) =
 
 (* #1 b *)
 fun get_substitutions1(sll, s) = 
+   let
+      fun gs1(sls, st, res) = 
+         case sls of 
+            [] => res
+            | x::xs => case all_except_option(st, x) of
+                        NONE => gs1(xs, st, res)
+                        | SOME(xt) => xt @ gs1(xs, st, res)
+   in
+      gs1(sll, s, [])
+   end
 
+(* #1 c *)
+fun get_substitutions2(sll, s) = 
+   let
+      fun gs2(sls, st, res) = 
+         case sls of
+            [] => res
+            | x::xs => case all_except_option(st, x) of
+                     NONE => gs2(xs, st, res)
+                     | SOME(xt) => gs2(xs, st, res @ xt)
+   in
+      gs2(sll, s, [])
+   end
+
+(* #1 d *)
+fun similar_names(sll, fullname) =
+   let
+      val {first=f,middle=m,last=l} = fullname
+      fun sn(slt, res) =
+         case slt of 
+            [] => res
+            | x::xs => {first=x, middle=m, last=l}::sn(xs, res)
+   in
+      fullname::sn(get_substitutions2(sll, f), [])
+   end
 
 
 
