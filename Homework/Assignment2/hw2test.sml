@@ -27,3 +27,26 @@ val sn1 = similar_names ([["Mirabel","Mira"],["Mirabel","Bella"],["Mira","Mimi",
 val sn2 = similar_names ([["Lisa","Elizabeth"],["Elizabeth","Lizzy"],["Katherine","Kat","K"]], {first="Elizabeth", middle="J", last="Arden"}) =
 	    [{first="Elizabeth", last="Arden", middle="J"}, {first="Lisa", last="Arden", middle="J"}, {first="Lizzy", last="Arden", middle="J"}]
 
+(* #2 a *)
+val cc1 = card_color (Spades, Num 8) = Black
+val cc2 = card_color (Hearts, Num 3) = Red
+
+(* #2 b *)
+val cv1 = card_value (Clubs, Num 9) = 9
+val cv2 = card_value (Clubs, Ace) = 11
+
+(* #2 c *)
+val rc1 = remove_card ([(Hearts, Ace), (Hearts, Num 4)], (Hearts, Num 4), IllegalMove) = [(Hearts, Ace)]
+val rc2 = remove_card ([(Spades, Ace), (Hearts, Num 8)], (Spades, Ace), IllegalMove) = [(Hearts, Num 8)]
+
+(* #2 d *)
+val asc1 = all_same_color [(Diamonds, Num 4), (Hearts, Ace), (Diamonds, Num 7)] = true
+val asc2 = all_same_color [(Spades, Num 4), (Hearts, Ace), (Diamonds, Num 7)] = false
+
+(* #2 e *)
+val sc1 = sum_cards [(Clubs, Num 2),(Clubs, Num 9), (Spades, Ace)] = 22
+val sc2 = sum_cards [(Clubs, Num 4)] = 4
+
+(* #2 f *)
+val s1 = score ([(Hearts, Num 2),(Clubs, Num 6)],11) = 3
+val s2 = score ([(Spades, Num 2),(Clubs, Num 7)], 13) = 2
