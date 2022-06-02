@@ -50,3 +50,7 @@ val sc2 = sum_cards [(Clubs, Num 4)] = 4
 (* #2 f *)
 val s1 = score ([(Hearts, Num 2),(Clubs, Num 6)],11) = 3
 val s2 = score ([(Spades, Num 2),(Clubs, Num 7)], 13) = 2
+
+(* #2 g *)
+val o1 = officiate ([(Diamonds, King),(Clubs, Num 7),(Spades, Num 8)],[Draw, Discard((Diamonds, King)), Draw], 8) = 1
+val o2 = officiate ([(Clubs, Num 2)],[Draw], 24) = 11

@@ -121,3 +121,20 @@ fun score(cs, goal) =
    in
      if all_same_color(cs) then pre_score div 2 else pre_score
    end
+
+(* #2 g *)
+fun officiate(cs, mv, goal) = 
+   let
+      fun play(cs, mv, hc) =
+         case mv of 
+            [] => score(hc, goal)
+            | m :: ms => case m of 
+                           Discard(c) => play(cs, ms, remove_card(hc, c, IllegalMove))
+                           | Draw => case cs of
+                                    [] => score(hc, goal)
+                                    | cd :: rest => if sum_cards(cd :: hc) > goal 
+                                                    then score(cd :: hc, goal)
+                                                    else play(rest, ms, cd :: hc)
+   in
+      play(cs, mv, [])
+   end
