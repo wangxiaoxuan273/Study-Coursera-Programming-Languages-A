@@ -9,30 +9,22 @@ fun same_string(s1 : string, s2 : string) =
 (* put your solutions for problem 1 here *)
 
 (* #1 a *)
-fun all_except_option(s, sl) = 
-   let
-      fun all_except(s, sl, lst) = 
-         case sl of 
-            [] => NONE
-            | x :: xs' =>  if same_string(x, s)
-                           then SOME (lst @ xs')
-                           else all_except(s, xs', lst @ [x])
-   in
-      all_except(s, sl, [])
-   end
+fun all_except_option (s,xs) =
+  case xs of
+      [] => NONE
+      | x::xs' => if same_string(s,x)
+                  then SOME xs'
+                  else case all_except_option(s,xs') of
+                        NONE => NONE
+                        | SOME y => SOME(x::y)
 
 (* #1 b *)
-fun get_substitutions1(sll, s) = 
-   let
-      fun gs1(sls, st, res) = 
-         case sls of 
-            [] => res
-            | x::xs => case all_except_option(st, x) of
-                        NONE => gs1(xs, st, res)
-                        | SOME(xt) => xt @ gs1(xs, st, res)
-   in
-      gs1(sll, s, [])
-   end
+fun get_substitutions1 (substitutions,str) =
+    case substitutions of
+	      [] => []
+         | x::xs => case all_except_option(str,x) of
+		               NONE => get_substitutions1(xs,str)
+		               | SOME y => y @ get_substitutions1(xs,str)
 
 (* #1 c *)
 fun get_substitutions2(sll, s) = 
@@ -116,8 +108,8 @@ fun score(cs, goal) =
    let
      val sum_score = sum_cards(cs)
      val pre_score = if sum_score > goal 
-                     then sum_score - goal
-                     else goal - sum_score
+                     then 3 * (sum_score - goal)
+                     else (goal - sum_score)
    in
      if all_same_color(cs) then pre_score div 2 else pre_score
    end
@@ -125,16 +117,16 @@ fun score(cs, goal) =
 (* #2 g *)
 fun officiate(cs, mv, goal) = 
    let
-      fun play(cs, mv, hc) =
-         case mv of 
-            [] => score(hc, goal)
-            | m :: ms => case m of 
-                           Discard(c) => play(cs, ms, remove_card(hc, c, IllegalMove))
-                           | Draw => case cs of
-                                    [] => score(hc, goal)
-                                    | cd :: rest => if sum_cards(cd :: hc) > goal 
-                                                    then score(cd :: hc, goal)
-                                                    else play(rest, ms, cd :: hc)
+     fun play(cards, moves, holds) = 
+         case moves of
+            [] => score(holds, goal)
+            | m::ms => case m of
+                  Discard p => play(cards, ms, remove_card(holds, p, IllegalMove))
+                  | Draw => case cards of 
+                              [] => score(holds, goal)
+                              | c::cds => if sum_cards(c::holds) > goal
+                                         then score(c::holds, goal)
+                                         else play(cds, ms, c::holds)
    in
-      play(cs, mv, [])
+     play(cs, mv, [])
    end
