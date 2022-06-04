@@ -130,3 +130,81 @@ fun officiate(cs, mv, goal) =
    in
      play(cs, mv, [])
    end
+
+(* #3 a *)
+fun sum_cards_a1(cs) =
+   let
+      fun card_value_a1(c) =
+         case c of
+            (_, Num(i)) => i
+            | (_, Ace) => 1
+            | _ => 10
+
+      fun sum_num(cs, res) = 
+         case cs of
+            [] => res
+            | x::xs => sum_num(xs, card_value_a1(x)+res)
+   in
+      sum_num(cs, 0)
+   end
+
+fun score_challenge(cs, goal) =
+   let
+      fun score_a1(cs, goal) =
+         let
+            val sum_score = sum_cards_a1(cs)
+            val pre_score = if sum_score > goal 
+                            then 3 * (sum_score - goal)
+                            else (goal - sum_score)
+         in
+            if all_same_color(cs) then pre_score div 2 else pre_score
+         end
+      val score_a11 = score(cs, goal)
+      val score_a1 = score_a1(cs, goal)
+   in
+      if score_a11 <= score_a1 then score_a11 else score_a1
+   end
+
+fun officiate_challenge(cs, mv, goal) = 
+   let
+     fun play(cards, moves, holds) = 
+         case moves of
+            [] => score_challenge(holds, goal)
+            | m::ms => case m of
+                  Discard p => play(cards, ms, remove_card(holds, p, IllegalMove))
+                  | Draw => case cards of 
+                              [] => score_challenge(holds, goal)
+                              | c::cds => if sum_cards(c::holds) > goal andalso sum_cards_a1(c::holds) > goal
+                                         then score_challenge(c::holds, goal)
+                                         else play(cds, ms, c::holds)
+   in
+     play(cs, mv, [])
+   end
+
+(* #3 b *)
+fun careful_player(cs, goal) = 
+   let
+      fun may_get_zero(card, holds, goal) = 
+         case holds of 
+            [] => NONE
+            | h :: hd  => if sum_cards(holds) + card_value(card) - card_value(h) - goal = 0
+                          then SOME(h)
+                          else may_get_zero(card, hd, goal - card_value(h))
+
+      fun play(cs, holds) =
+         if score(holds, goal) = 0
+         then []
+         else
+            case cs of
+               [] => []
+               | c :: rest => if goal - sum_cards(holds) >= 10
+                              then Draw :: play(rest, c::holds)
+                              else case may_get_zero(c, holds, goal) of
+                                       SOME(cd) => Discard(cd) :: Draw :: []
+                                       (* if NONE, the strategy is to discard the first card in holds when holds is not empty *)
+                                       | NONE => case holds of 
+                                                   [] => []
+                                                   | h :: _ => Discard(h) :: play(cs, remove_card(holds, h, IllegalMove))
+   in
+      play(cs, [])
+   end

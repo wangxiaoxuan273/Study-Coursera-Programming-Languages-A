@@ -1,56 +1,41 @@
-(* Homework 2 Tests produced by me *)
+(* Homework2 Simple Test *)
+(* These are basic test cases. Passing these tests does not guarantee that your code will pass the actual homework grader *)
+(* To run the test, add a new line to the top of this file: use "homeworkname.sml"; *)
+(* All the tests should evaluate to true. For example, the REPL should say: val test1 = true : bool *)
 
-use "hw2.sml";
+val test1 = all_except_option ("string", ["string"]) = SOME []
 
-(* #1 a *)
-val aeo1 = all_except_option ("string", ["cool"]) = NONE
-val aeo2 = all_except_option ("string", ["nice", "string", "bool"]) = SOME ["nice", "bool"]
+val test2 = get_substitutions1 ([["foo"],["there"]], "foo") = []
 
-(* #1 b *)
-val gs11 = get_substitutions1([["Susan", "Stella", "Coco"], ["Luisa", "Becky", "Barbie"], 
-["Barbie", "Anna", "Elsa"]], "Barbie") = ["Luisa", "Becky", "Anna", "Elsa"]
+val test3 = get_substitutions2 ([["foo"],["there"]], "foo") = []
 
-val gs12 = get_substitutions1([["Camilo", "Dolores"], ["Camilo", "Antonio"], ["Mirabel", "Camilo"], 
-["Pepa", "Felix"], ["Camilo", "Julieta"]], "Camilo") = ["Dolores", "Antonio", "Mirabel", "Julieta"]
+val test4 = similar_names ([["Fred","Fredrick"],["Elizabeth","Betty"],["Freddie","Fred","F"]], {first="Fred", middle="W", last="Smith"}) =
+	    [{first="Fred", last="Smith", middle="W"}, {first="Fredrick", last="Smith", middle="W"},
+	     {first="Freddie", last="Smith", middle="W"}, {first="F", last="Smith", middle="W"}]
 
-(* #1 c *)
-val gs21 = get_substitutions2([["Susan", "Stella", "Coco"], ["Luisa", "Becky", "Barbie"], 
-["Barbie", "Anna", "Elsa"]], "Barbie") = ["Luisa", "Becky", "Anna", "Elsa"]
+val test5 = card_color (Clubs, Num 2) = Black
 
-val gs22 = get_substitutions2([["Camilo", "Dolores"], ["Camilo", "Antonio"], ["Mirabel", "Camilo"], 
-["Pepa", "Felix"], ["Camilo", "Julieta"]], "Camilo") = ["Dolores", "Antonio", "Mirabel", "Julieta"]
+val test6 = card_value (Clubs, Num 2) = 2
 
-(* #1 d *)
-val sn1 = similar_names ([["Mirabel","Mira"],["Mirabel","Bella"],["Mira","Mimi","M"]], {first="Mirabel", middle="U", last="Madrigal"}) =
-[{first="Mirabel", middle="U", last="Madrigal"}, {first="Mira", middle="U", last="Madrigal"}, {first="Bella", middle="U", last="Madrigal"}]
+val test7 = remove_card ([(Hearts, Ace)], (Hearts, Ace), IllegalMove) = []
 
-val sn2 = similar_names ([["Lisa","Elizabeth"],["Elizabeth","Lizzy"],["Katherine","Kat","K"]], {first="Elizabeth", middle="J", last="Arden"}) =
-	    [{first="Elizabeth", last="Arden", middle="J"}, {first="Lisa", last="Arden", middle="J"}, {first="Lizzy", last="Arden", middle="J"}]
+val test8 = all_same_color [(Hearts, Ace), (Hearts, Ace)] = true
 
-(* #2 a *)
-val cc1 = card_color (Spades, Num 8) = Black
-val cc2 = card_color (Hearts, Num 3) = Red
+val test9 = sum_cards [(Clubs, Num 2),(Clubs, Num 2)] = 4
 
-(* #2 b *)
-val cv1 = card_value (Clubs, Num 9) = 9
-val cv2 = card_value (Clubs, Ace) = 11
+val test10 = score ([(Hearts, Num 2),(Clubs, Num 4)],10) = 4
 
-(* #2 c *)
-val rc1 = remove_card ([(Hearts, Ace), (Hearts, Num 4)], (Hearts, Num 4), IllegalMove) = [(Hearts, Ace)]
-val rc2 = remove_card ([(Spades, Ace), (Hearts, Num 8)], (Spades, Ace), IllegalMove) = [(Hearts, Num 8)]
+val test11 = officiate ([(Hearts, Num 2),(Clubs, Num 4)],[Draw], 15) = 6
 
-(* #2 d *)
-val asc1 = all_same_color [(Diamonds, Num 4), (Hearts, Ace), (Diamonds, Num 7)] = true
-val asc2 = all_same_color [(Spades, Num 4), (Hearts, Ace), (Diamonds, Num 7)] = false
+val test12 = officiate ([(Clubs,Ace),(Spades,Ace),(Clubs,Ace),(Spades,Ace)],
+                        [Draw,Draw,Draw,Draw,Draw],
+                        42)
+             = 3
 
-(* #2 e *)
-val sc1 = sum_cards [(Clubs, Num 2),(Clubs, Num 9), (Spades, Ace)] = 22
-val sc2 = sum_cards [(Clubs, Num 4)] = 4
-
-(* #2 f *)
-val s1 = score ([(Hearts, Num 2),(Clubs, Num 6)],11) = 3
-val s2 = score ([(Spades, Num 2),(Diamonds, Num 7)], 8) = 3
-
-(* #2 g *)
-val o1 = officiate ([(Diamonds, King),(Clubs, Num 9),(Spades, Num 8)],[Draw, Discard((Diamonds, King)), Draw], 21) = 6
-val o2 = officiate ([(Clubs, Num 2)],[Draw], 24) = 11
+val test13 = ((officiate([(Clubs,Jack),(Spades,Num(8))],
+                         [Draw,Discard(Hearts,Jack)],
+                         42);
+               false) 
+              handle IllegalMove => true)
+             
+             
