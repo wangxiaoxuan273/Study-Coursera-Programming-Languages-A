@@ -56,9 +56,9 @@ val o1 = officiate ([(Diamonds, King),(Clubs, Num 9),(Spades, Num 8)],[Draw, Dis
 val o2 = officiate ([(Clubs, Num 2)],[Draw], 24) = 11
 
 (* #3 a *)
-val osc1 = officiate_challenge([(Diamonds, Ace),(Hearts, Ace), (Diamonds, Num 4)], [Draw, Draw, Draw], 20) = 7
+val osc1 = officiate_challenge([(Diamonds, Ace),(Hearts, Ace), (Diamonds, Num 4)], [Draw, Draw, Draw], 20) = 2
 val osc2 = officiate_challenge([(Spades, Num 5), (Diamonds, Num 4), (Hearts, Ace)], [Draw, Discard((Spades, Num 5)), Draw, Draw], 11) = 3
 
 (* #3 b *)
-val cp1 = careful_player([(Diamonds, Num 6), (Spades, Num 3), (Hearts, Num 4), (Spades, Ace)], 20)
-val cp2 = careful_player([(Clubs, Queen), (Clubs, Num 5), (Hearts, Num 2)], 16)
+val cp1 = careful_player([(Diamonds, Num 6), (Spades, Num 3), (Hearts, Num 4), (Spades, Ace)], 20) = [Draw,Draw,Draw,Discard (Hearts,Num 4),Draw]
+val cp2 = careful_player([(Clubs, Queen), (Clubs, Num 5), (Hearts, Num 2)], 16) = [Draw,Discard (Clubs,Queen),Draw,Draw]

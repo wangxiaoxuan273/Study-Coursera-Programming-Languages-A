@@ -132,41 +132,52 @@ fun officiate(cs, mv, goal) =
    end
 
 (* #3 a *)
-fun sum_cards_a1(cs) =
-   let
-      fun card_value_a1(c) =
-         case c of
-            (_, Num(i)) => i
-            | (_, Ace) => 1
-            | _ => 10
+fun num_aces(cs) = 
+   case cs of 
+      [] => 0
+      | c::cs' => case c of 
+                  (_, Ace) => 1 + num_aces(cs')
+                  | _ => num_aces(cs')
 
-      fun sum_num(cs, res) = 
-         case cs of
-            [] => res
-            | x::xs => sum_num(xs, card_value_a1(x)+res)
-   in
-      sum_num(cs, 0)
-   end
+fun get_sums(num, sum_score) =
+   if num = 0 then [sum_score] else (sum_score - num * 10) :: get_sums(num-1, sum_score)
 
-fun score_challenge(cs, goal) =
+fun score_challenge(holds, goal) =
    let
-      fun score_a1(cs, goal) =
+      fun sum_to_score(sum_score, holds, goal) =
          let
-            val sum_score = sum_cards_a1(cs)
             val pre_score = if sum_score > goal 
-                            then 3 * (sum_score - goal)
-                            else (goal - sum_score)
+                           then 3 * (sum_score - goal)
+                           else (goal - sum_score)
          in
-            if all_same_color(cs) then pre_score div 2 else pre_score
+            if all_same_color(holds) then pre_score div 2 else pre_score
          end
-      val score_a11 = score(cs, goal)
-      val score_a1 = score_a1(cs, goal)
+      val regular_sum = sum_cards(holds)
+      val all_possible_sums = get_sums(num_aces(holds), regular_sum)
+      fun get_min_score(sums, minVal) =
+         case sums of
+            [] => minVal
+            | s :: sc' => 
+               let
+                  val final_score = sum_to_score(s, holds, goal)
+               in
+                  if final_score < minVal then get_min_score(sc', final_score) else get_min_score(sc', minVal)
+               end   
    in
-      if score_a11 <= score_a1 then score_a11 else score_a1
+      get_min_score(all_possible_sums, regular_sum + 50) (* a big value to start with *)
    end
 
-fun officiate_challenge(cs, mv, goal) = 
+fun officiate_challenge(cs, mv, goal) =
    let
+     fun all_sums_exceed(holds, goal) =
+      let
+         fun loop(sums, goal) =
+            case sums of
+            [] => true
+            | s :: sm' => s > goal andalso loop(sm', goal)
+      in
+         loop(get_sums(num_aces(holds), sum_cards(holds)), goal)
+      end
      fun play(cards, moves, holds) = 
          case moves of
             [] => score_challenge(holds, goal)
@@ -174,7 +185,7 @@ fun officiate_challenge(cs, mv, goal) =
                   Discard p => play(cards, ms, remove_card(holds, p, IllegalMove))
                   | Draw => case cards of 
                               [] => score_challenge(holds, goal)
-                              | c::cds => if sum_cards(c::holds) > goal andalso sum_cards_a1(c::holds) > goal
+                              | c::cds => if all_sums_exceed(c::holds, goal)
                                          then score_challenge(c::holds, goal)
                                          else play(cds, ms, c::holds)
    in
