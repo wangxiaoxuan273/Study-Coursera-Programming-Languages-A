@@ -55,3 +55,21 @@ val longest_capitalized = longest_string1 o only_capitals
 
 (* #6 *)
 fun rev_string(s) = (String.implode o List.rev o String.explode) s
+
+(* #7 *)
+fun first_answer fcn xs = 
+	case xs of [] => raise NoAnswer
+			   | x :: xs' => case fcn(x) of
+							SOME(y) => y
+						  | NONE => first_answer fcn xs'
+
+(* #8 *)
+fun all_answers fcn xs = 
+let
+	fun accumulate(lst, acc) = case lst of [] => SOME(acc) 
+										| x :: xs' => case fcn x of NONE => NONE
+																| SOME(y) => accumulate(xs', acc @ y)
+in
+	case xs of [] => SOME([]) 
+			| x :: xs' => accumulate(xs, [])
+end			

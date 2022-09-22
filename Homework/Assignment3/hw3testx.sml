@@ -28,3 +28,11 @@ val lc2 = longest_capitalized ["You", "are", "Seriously", "only", "half", "Korea
 (* #6 *)
 val rs1 = rev_string "dog" = "god"
 val rs2 = rev_string "Susan" = "nasuS"
+
+(* #7 *)
+val fa1 = first_answer (fn x => if x mod 2 = 0 then SOME x else NONE) [1,2,3,4,5] = 2
+val fa2 = first_answer (fn x => if String.size x > 4 then SOME x else NONE) ["Fei", "Jo", "Meg", "Amy", "Liz", "Maria", "Rose"] = "Maria"
+
+(* #8 *)
+val aa1 = all_answers (fn x => if x mod 2 = 0 then SOME [x, x+3] else NONE) [2,3,4,5,6,7] = NONE
+val aa2 = all_answers (fn x => if x mod 2 = 0 then SOME [x, x+3] else NONE) [2,4,6] = SOME([2,5,4,7,6,9])
