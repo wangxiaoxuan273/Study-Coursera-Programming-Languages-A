@@ -36,3 +36,19 @@ val fa2 = first_answer (fn x => if String.size x > 4 then SOME x else NONE) ["Fe
 (* #8 *)
 val aa1 = all_answers (fn x => if x mod 2 = 0 then SOME [x, x+3] else NONE) [2,3,4,5,6,7] = NONE
 val aa2 = all_answers (fn x => if x mod 2 = 0 then SOME [x, x+3] else NONE) [2,4,6] = SOME([2,5,4,7,6,9])
+
+(* #9 a *)
+val cw1 = count_wildcards (Variable("x")) = 0
+val cw2 = count_wildcards (TupleP [Wildcard, Wildcard, Wildcard]) = 3
+
+(* #9 b *)
+val cwavl1 = count_wild_and_variable_lengths (Wildcard) = 1
+val cwavl2 = count_wild_and_variable_lengths (ConstructorP ("lol", Variable("lol"))) = 3
+
+(* #9 c *)
+val csv1 = count_some_var ("123", ConstP(123)) = 0
+val csv2 = count_some_var ("456", TupleP [Variable("xw"), Variable("456"), Variable("234"), Variable("456")]) = 2
+
+(* #10 *)
+val cp1 = check_pat (TupleP [Variable("H"), Variable("R"), Wildcard]) = true
+val cp2 = check_pat (ConstructorP("na", TupleP [Variable("lol"), ConstP(14), Variable("lol")])) = false
