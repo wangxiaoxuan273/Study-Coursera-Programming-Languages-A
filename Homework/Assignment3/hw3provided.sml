@@ -46,9 +46,9 @@ fun longest_string1(sl) = List.foldl(fn (a, b) => if String.size a > String.size
 fun longest_string2(sl) = List.foldl(fn (a, b) => if String.size a >= String.size b then a else b) "" sl
 
 (* #4 *)
-fun longest_string_helper(fcn) = List.foldl(fcn) ""
-val longest_string3 = longest_string_helper (fn (a, b) => if String.size a > String.size b then a else b)
-val longest_string4 = longest_string_helper (fn (a, b) => if String.size a >= String.size b then a else b)
+fun longest_string_helper(fcn) = List.foldl(fn (a, b) => if fcn (String.size a, String.size b) then a else b) ""
+val longest_string3 = longest_string_helper (fn (a, b) => if a > b then true else false)
+val longest_string4 = longest_string_helper (fn (a, b) => if a >= b then true else false)
 
 (* #5 *)
 val longest_capitalized = longest_string1 o only_capitals
@@ -99,3 +99,10 @@ in
 end
 
 (* #11 *)
+(*
+fun match (v, p) = case (v, p) of
+	  (Unit, UnitP) => []
+	| (_, Wildcard) => []
+	| (someV, Variable var) => [(var, someV)]
+	| 
+*)
