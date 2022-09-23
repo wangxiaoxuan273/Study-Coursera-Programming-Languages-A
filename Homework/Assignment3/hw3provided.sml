@@ -73,3 +73,29 @@ in
 	case xs of [] => SOME([]) 
 			| x :: xs' => accumulate(xs, [])
 end			
+
+(* #9 a *)
+fun count_wildcards p = g (fn () => 1) (fn (x) => 0) p
+
+(* #9 b *)
+fun count_wild_and_variable_lengths p = g (fn () => 1) (fn (x) => String.size(x)) p
+
+(* #9 c *)
+fun count_some_var(s, p) = g (fn () => 0) ((fn s => fn x => if s = x then 1 else 0) s) p
+
+(* #10 *)
+fun check_pat p = 
+let
+  fun get_list p = case p of
+	    Variable x        => [x]
+	  | TupleP ps         => List.foldl(fn (a,b) => get_list(a) @ b) [] ps
+	  | ConstructorP(_,p) => get_list(p)
+	  | _                 => []
+  fun no_repeats lst = case lst of
+		[] => true
+	  | x :: xs' => no_repeats xs' andalso not (List.exists (fn (a) => a = x) xs')
+in
+  no_repeats (get_list p)
+end
+
+(* #11 *)
