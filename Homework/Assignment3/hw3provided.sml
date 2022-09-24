@@ -99,10 +99,16 @@ in
 end
 
 (* #11 *)
-(*
 fun match (v, p) = case (v, p) of
-	  (Unit, UnitP) => []
-	| (_, Wildcard) => []
-	| (someV, Variable var) => [(var, someV)]
-	| 
+	  (Unit, UnitP) => SOME([])
+	| (_, Wildcard) => SOME([])
+	| (someV, Variable var) => SOME[(var, someV)]
+	| (Const(n1), ConstP(n2)) => if n1 = n2 then SOME([]) else NONE
+	| (Tuple(vs), TupleP(ps)) => if List.length vs = List.length ps then all_answers match (ListPair.zip(vs, ps)) else NONE
+	| (Constructor(s1, v'), ConstructorP(s2, p')) => if s1 = s2 then match (v', p') else NONE
+	| _ => NONE
+
+(* #12 *)
+(*
+fun first_match v lsp = first_answer (fn p => match(v, p)) lsp handle NoAnswer => NONE
 *)

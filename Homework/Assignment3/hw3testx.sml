@@ -52,3 +52,9 @@ val csv2 = count_some_var ("456", TupleP [Variable("xw"), Variable("456"), Varia
 (* #10 *)
 val cp1 = check_pat (TupleP [Variable("H"), Variable("R"), Wildcard]) = true
 val cp2 = check_pat (ConstructorP("na", TupleP [Variable("lol"), ConstP(14), Variable("lol")])) = false
+
+(* #11 *)
+val m1 = match (Tuple [Const(91), Const(18), Unit], TupleP [Variable("o"), ConstP(18), UnitP]) = SOME([("o", Const(91))])
+val m2 = match (Constructor("q", Const(19)), ConstructorP("q", ConstP(87))) = NONE
+
+(* #12 *)
