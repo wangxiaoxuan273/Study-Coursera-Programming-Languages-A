@@ -37,24 +37,24 @@ datatype typ = Anything
 (**** you can put all your code here ****)
 
 (* #1 *)
-fun only_capitals(sl) = List.filter(fn s => Char.isUpper(String.sub(s, 0))) sl
+val only_capitals = List.filter(fn s => Char.isUpper(String.sub(s, 0)))
 
 (* #2 *)
-fun longest_string1(sl) = List.foldl(fn (a, b) => if String.size a > String.size b then a else b) "" sl
+val longest_string1 = List.foldl(fn (a, b) => if String.size a > String.size b then a else b) ""
 
 (* #3 *)
-fun longest_string2(sl) = List.foldl(fn (a, b) => if String.size a >= String.size b then a else b) "" sl
+val longest_string2 = List.foldl(fn (a, b) => if String.size a >= String.size b then a else b) ""
 
 (* #4 *)
 fun longest_string_helper(fcn) = List.foldl(fn (a, b) => if fcn (String.size a, String.size b) then a else b) ""
-val longest_string3 = longest_string_helper (fn (a, b) => if a > b then true else false)
-val longest_string4 = longest_string_helper (fn (a, b) => if a >= b then true else false)
+val longest_string3 = longest_string_helper (fn (a, b) => a > b)
+val longest_string4 = longest_string_helper (fn (a, b) => a >= b)
 
 (* #5 *)
 val longest_capitalized = longest_string1 o only_capitals
 
 (* #6 *)
-fun rev_string(s) = (String.implode o List.rev o String.explode) s
+val rev_string = String.implode o List.rev o String.explode
 
 (* #7 *)
 fun first_answer fcn xs = 
@@ -75,10 +75,10 @@ in
 end			
 
 (* #9 a *)
-fun count_wildcards p = g (fn () => 1) (fn (x) => 0) p
+val count_wildcards = g (fn () => 1) (fn _ => 0)
 
 (* #9 b *)
-fun count_wild_and_variable_lengths p = g (fn () => 1) (fn (x) => String.size(x)) p
+val count_wild_and_variable_lengths = g (fn () => 1) String.size
 
 (* #9 c *)
 fun count_some_var(s, p) = g (fn () => 0) ((fn s => fn x => if s = x then 1 else 0) s) p
@@ -109,6 +109,6 @@ fun match (v, p) = case (v, p) of
 	| _ => NONE
 
 (* #12 *)
-(*
-fun first_match v lsp = first_answer (fn p => match(v, p)) lsp handle NoAnswer => NONE
-*)
+fun first_match v lsp = 
+	SOME (first_answer (fn p => match(v, p)) lsp) 
+	handle NoAnswer => NONE

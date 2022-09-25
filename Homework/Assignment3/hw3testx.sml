@@ -54,7 +54,9 @@ val cp1 = check_pat (TupleP [Variable("H"), Variable("R"), Wildcard]) = true
 val cp2 = check_pat (ConstructorP("na", TupleP [Variable("lol"), ConstP(14), Variable("lol")])) = false
 
 (* #11 *)
-val m1 = match (Tuple [Const(91), Const(18), Unit], TupleP [Variable("o"), ConstP(18), UnitP]) = SOME([("o", Const(91))])
+val m1 = match (Tuple [Const(91), Const(18), Unit], TupleP [Variable("o"), ConstP(18), UnitP]) = SOME [("o", Const(91))]
 val m2 = match (Constructor("q", Const(19)), ConstructorP("q", ConstP(87))) = NONE
 
 (* #12 *)
+val fm1 = first_match (Const(49)) [UnitP, ConstP(51), Wildcard] = SOME []
+val fm2 = first_match (Constructor("lmao", Const(33))) [UnitP, Variable("uuu"), Wildcard] = SOME [("uuu",Constructor ("lmao",Const 33))]
