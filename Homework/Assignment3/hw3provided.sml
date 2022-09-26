@@ -112,3 +112,5 @@ fun match (v, p) = case (v, p) of
 fun first_match v lsp = 
 	SOME (first_answer (fn p => match(v, p)) lsp) 
 	handle NoAnswer => NONE
+
+(* I gave up trying the challenge problem as it is overly complex *)
