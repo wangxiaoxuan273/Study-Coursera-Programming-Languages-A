@@ -12,4 +12,4 @@ This repo contains the materials of the online course *Programming Languages, Pa
 
 + Video Code Files: This folder is offered by the course team and contains the code samples of each lecture.
 
-Last updated: September 26, 2022
+Finished the course on September 29, 2022. This is an amazing course, I have learnt so much. Thanks Dan!
